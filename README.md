@@ -36,6 +36,36 @@ Options:
 Examples:
   index.js SSG -i foo.js  Create SSG with a given file/folder
 ```
+## Example
+
+The input of a text file.
+```text
+Title
+
+
+This is Paragraph 1
+This is Paragraph 2
+```
+
+It will generate the HTML file as following:
+
+``` HTML
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1>Title</h1>
+  <p>This is Paragraph 1</p>
+  <p>This is Paragraph 2</p>
+</body>
+</html>
+```
+
+
 
 ## Credits
 
