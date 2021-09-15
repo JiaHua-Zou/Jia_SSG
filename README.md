@@ -12,10 +12,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com) and [N
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/JiaHua-Zou/jia-SSG.git
-
-# Go into the repository
-$ cd ssg_jia
+$ git clone https://github.com/JiaHua-Zou/Jia_SSG.git
 
 # Install dependencies
 $ npm install fs-extra yargs
