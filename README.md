@@ -1,7 +1,7 @@
 # JS Static Site Generator (SSG)
 
 Uses node.js to generate a html file from a textfile or text files in a folder.
-
+[Demo](https://jiahua-zou.github.io/Jia_SSG.github.io/)
 ## Key Features
 * Parse the title from the first line in the text that is followed by two blank lines in the text file.
 * Generate a HTML index that links to the other HTML if the input is a folder
