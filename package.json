@@ -1,0 +1,23 @@
+{
+  "name": "ssg_jia_v0.1",
+  "version": "0.1v",
+  "main": "main.js",
+  "devDependencies": {},
+  "bin": {
+    "yargs-example": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli"
+  ],
+  "preferGlobal": true,
+  "author": "JiaHua",
+  "license": "ISC",
+  "description": "SSG_V0.1",
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "yargs": "^17.1.1"
+  }
+}
