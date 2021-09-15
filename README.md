@@ -3,8 +3,8 @@
 Uses node.js to generate a html file from a textfile or text files in a folder.
 
 ## Key Features
-* Parse the title if the first line is followed by two blank lines in the text file.
-
+* Parse the title from the first line in the text that is followed by two blank lines in the text file.
+* Generate a HTML index that links to the other HTML if the input is a folder
 
 ## How To Use
 
