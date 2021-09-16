@@ -23,18 +23,15 @@ $ node .\index.js [options] <file/folder>
 
 ## Options
 ```bash
-Usage: index.js <command> [options]
-
-Commands:
-  index.js SSG  Create SSG with input of a file/folder
+Usage: node index.js [options] <input>
 
 Options:
-      --version  Show version number                                   [boolean]
-  -i, --file     Takes in an input of file/folder                     [required]
-  -h, --help     Show help                                             [boolean]
+  -i, --input          Takes in an Input for file/folder     [string] [required]
+  -h, --help           Show help                                       [boolean]
+      ---v, --version  Show version number                             [boolean]
 
 Examples:
-  index.js SSG -i foo.js  Create SSG with a given file/folder
+  node index.js -i foo.txt  Create SSG with a given file/folder
 ```
 ## Example
 
