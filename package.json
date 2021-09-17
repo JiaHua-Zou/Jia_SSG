@@ -1,6 +1,6 @@
 {
   "name": "ssg_jia_v0.1",
-  "version": "0.1v",
+  "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {},
   "bin": {
@@ -12,7 +12,6 @@
   "keywords": [
     "cli"
   ],
-  "preferGlobal": true,
   "author": "JiaHua",
   "license": "ISC",
   "description": "SSG_V0.1",
