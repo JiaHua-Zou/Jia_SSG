@@ -1,4 +1,3 @@
-
 var fs = require("fs");
 var fse = require("fs-extra");
 const path = require("path");
@@ -62,10 +61,20 @@ function readFile(fileSrc) {
 }
 
 function htmlConverter(src, fileDirName) {
-    //bug fix TODO: Still create the title even if there are two blank lines.
-  var dat = src;
-  const title = dat.split("\n\n\n");
-  const text = dat.slice(dat.search("\n\n\n") + 3);
+  var fileName = "";
+  var text = "";
+  var title = src.match(/^.+(\r?\n\r?\n\r?\n)/) || "";
+
+  if (!title) {
+    fileName = fileDirName.slice(0, -5);
+    text = src;
+  } else {
+    fileName = title[0].trim();
+    title = title[0].trim()
+    // console.log(fileName)
+    text = src.substring(fileName.length + 3);
+  }
+
   const htmlElement = text
     .split(/\r?\n\r?\n/)
     .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
@@ -73,9 +82,9 @@ function htmlConverter(src, fileDirName) {
 
   var htmlBase =
     `<!doctype html><html lang="en"><head><meta charset="utf-8">` +
-    `<title> ${title[0]}</title>` +
+    `<title> ${fileName}</title>` +
     `<meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `</head><body><h1>${title[0]}</h1>${htmlElement}</body></html>`;
+    `</head><body><h1>${title}</h1>${htmlElement}</body></html>`;
 
   fs.writeFile(`./dist/${fileDirName}`, htmlBase, function (err) {
     if (err) console.log(err);
@@ -86,12 +95,12 @@ function indexGenerator(fileSrc) {
   fs.readdir(fileSrc, (err, files) => {
     var list = "";
     files.forEach((element) => {
-      console.log(element)
-      if (element != null){
-          list += `<h3><a href="${
-              path.basename(element, ".txt") + ".html"
-            }">${path.basename(element, ".txt")}</a></h3>`;
-        }
+      console.log(element);
+      if (element != null) {
+        list += `<h3><a href="${
+          path.basename(element, ".txt") + ".html"
+        }">${path.basename(element, ".txt")}</a></h3>`;
+      }
     });
     var htmlBase =
       `<!doctype html><html lang="en"><head><meta charset="utf-8">` +
