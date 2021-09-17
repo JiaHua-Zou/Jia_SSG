@@ -4,6 +4,7 @@ const argv = require('yargs')
   .usage('Usage: node $0 [options] <input>')
   .example('node $0 -i foo.txt', 'Create SSG with a given file/folder')
   .alias('-v', 'version')
+  .version('0.1V')
   .options( 'i',{
     alias: 'input',
     demandOption: true,
