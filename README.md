@@ -38,7 +38,9 @@ Title
 
 
 This is Paragraph 1
+
 This is Paragraph 2
+
 ```
 
 It will generate the HTML file as following:
