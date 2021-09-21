@@ -19,23 +19,32 @@ function readFile(fileSrc) {
         console.log(err);
         process.exit(1);
       }
+      
       fs.mkdir(process.cwd() + "/dist", { recursive: true }, (error) => {
         if (error) {
           console.log(`An error occurred: ${error}`);
         } else {
           files.forEach((file) => {
-            fs.readFile(
-              process.argv[3] + "/" + file,
-              "utf8",
-              function (err, data) {
-                if (err) {
-                  console.log(err);
-                  process.exit(1);
-                }
-                fileDir = path.basename(file, ".txt") + ".html";
-                htmlConverter(data, fileDir);
+            fs.stat(process.argv[3] + "/" + file, (err, stats) => {
+              if (err) {
+                console.log("An Errored has occurred!");
+                process.exit(1);
               }
-            );
+              if (!stats.isDirectory()) {
+                fs.readFile(
+                  process.argv[3] + "/" + file,
+                  "utf8",
+                  function (err, data) {
+                    if (err) {
+                      console.log(err);
+                      process.exit(1);
+                    }
+                    fileDir = path.basename(file, ".txt") + ".html";
+                    htmlConverter(data, fileDir);
+                  }
+                );
+              }
+            });
           });
           indexGenerator(fileSrc);
         }
@@ -70,8 +79,7 @@ function htmlConverter(src, fileDirName) {
     text = src;
   } else {
     fileName = title[0].trim();
-    title = title[0].trim()
-    // console.log(fileName)
+    title = title[0].trim();
     text = src.substring(fileName.length + 3);
   }
 
