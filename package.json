@@ -1,6 +1,6 @@
 {
   "name": "ssg_jia_v0.1",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "main.js",
   "devDependencies": {},
   "bin": {
@@ -13,7 +13,7 @@
     "cli"
   ],
   "author": "JiaHua",
-  "license": "ISC",
+  "license": "MIT",
   "description": "SSG_V0.1",
   "dependencies": {
     "fs-extra": "^10.0.0",
