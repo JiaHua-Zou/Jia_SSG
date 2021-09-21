@@ -14,6 +14,9 @@ To clone and run this application, you'll need [Git](https://git-scm.com) and [N
 # Clone this repository
 $ git clone https://github.com/JiaHua-Zou/Jia_SSG.git
 
+# Install the package
+npm install
+
 # Run the app
 $ node .\index.js [options] <file/folder>
 ```
