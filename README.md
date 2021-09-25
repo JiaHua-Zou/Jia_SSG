@@ -2,9 +2,12 @@
 
 Uses node.js to generate a html file from a textfile or text files in a folder.
 [Demo](https://jiahua-zou.github.io/Jia_SSG.github.io/)
+
 ## Key Features
-* Parse the title from the first line in the text that is followed by two blank lines in the text file.
-* Generate a HTML index that links to the other HTML if the input is a folder
+
+- Parse the title from the first line in the text that is followed by two blank lines in the text file.
+- Generate a HTML index that links to the other HTML if the input is a folder
+- Feature is updated(9/24/2021) now MD(MarkDown) file also can be generated as a HTML.
 
 ## How To Use
 
@@ -22,6 +25,7 @@ $ node .\index.js [options] <file/folder>
 ```
 
 ## Options
+
 ```bash
 Usage: node index.js [options] <input>
 
@@ -33,9 +37,11 @@ Options:
 Examples:
   node index.js -i foo.txt  Create SSG with a given file/folder
 ```
+
 ## Example
 
 The input of a text file.
+
 ```text
 Title
 
@@ -48,7 +54,7 @@ This is Paragraph 2
 
 It will generate the HTML file as following:
 
-``` HTML
+```HTML
 <!doctype html>
 <html lang="en">
 <head>
@@ -64,8 +70,6 @@ It will generate the HTML file as following:
 </html>
 ```
 
-
-
 ## Credits
 
 This software uses the following open source packages:
@@ -74,8 +78,6 @@ This software uses the following open source packages:
 - [fs-extra](https://github.com/jprichardson/node-fs-extra)
 - [Yargs](https://github.com/yargs/yargs)
 
-
-
 ## License
 
 MIT
@@ -83,4 +85,3 @@ MIT
 ---
 
 > GitHub [JiaHua](https://github.com/JiaHua-Zou) &nbsp;&middot;&nbsp;
-

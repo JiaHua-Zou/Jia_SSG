@@ -2,6 +2,10 @@ var fs = require("fs");
 var fse = require("fs-extra");
 const path = require("path");
 
+function isMarkDown(filename) {
+  return filename.split('.')[1] === 'md';
+}
+
 function readFile(fileSrc) {
   // Read the argument to find if it is a folder or a .txt file.
   var fileDir;
@@ -61,17 +65,18 @@ function readFile(fileSrc) {
         if (error) {
           console.log(`An error occurred: ${error}`);
         } else {
-          fileDir = path.basename(filename, ".txt") + ".html";
-          htmlConverter(data, fileDir);
+          fileDir = isMarkDown(filename) ? path.basename(filename, ".md") + ".html" : path.basename(filename, ".txt") + ".html";
+          htmlConverter(data, fileDir, isMarkDown(filename));
         }
       });
     });
   }
 }
 
-function htmlConverter(src, fileDirName) {
+function htmlConverter(src, fileDirName, isMarkDown = false) {
   var fileName = "";
   var text = "";
+ 
   var title = src.match(/^.+(\r?\n\r?\n\r?\n)/) || "";
 
   if (!title) {
@@ -83,10 +88,55 @@ function htmlConverter(src, fileDirName) {
     text = src.substring(fileName.length + 3);
   }
 
-  const htmlElement = text
+  let htmlElement = '';
+  if(!isMarkDown){
+    htmlElement = text
     .split(/\r?\n\r?\n/)
     .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
     .join(" ");
+  }else {
+    const htmlArr = [];
+    console.log(text.split(/\r?\n/));
+    let isOpen = false;
+    text
+    .split(/\r?\n/)
+    .forEach(e => {
+      const arrData = e.split(' ');
+      arrData[0] = arrData[0].startsWith('```') && arrData[0].length > 3 ? '````' : arrData[0];
+      if(arrData[0] !== '```' && isOpen) {
+        arrData[0] = 'e';
+      }
+      switch(arrData[0]) {
+        case '#':
+          htmlArr.push(`<h1>${arrData.slice(1).join(" ")}</h1><hr />\n`);
+          break;
+        case '##':
+          htmlArr.push(`<h2>${arrData.slice(1).join(" ")}</h2>\n`);
+          break;
+        case '###':
+          htmlArr.push(`<h3>${arrData.slice(1).join(" ")}</h3>\n`);
+          break;
+        case '```':
+          htmlArr.push(`${e}</xmp>\n`);
+          isOpen = false;
+          break;
+        case '````':
+          htmlArr.push(`<xmp>${e}\n`);
+          isOpen = true;
+          break;
+        case '':
+          htmlArr.push(`<br />\n`);
+          break;
+        case 'e':
+          htmlArr.push(`${e}\n`);
+          break;
+        default:
+          htmlArr.push(`<p>${e}</p>\n`);
+      }
+      htmlElement = htmlArr.join("")
+    });
+
+  }
 
   var htmlBase =
     `<!doctype html><html lang="en"><head><meta charset="utf-8">` +
