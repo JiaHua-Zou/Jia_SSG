@@ -108,9 +108,14 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
         arrData[0].startsWith("```") && arrData[0].length > 3
           ? "````"
           : arrData[0];
-      if (arrData[0] !== "```" && isOpen) {
+
+      // filter out the 3 and 1 backticks
+      if ((arrData[0] !== "```" && arrData[0] !== "`") && isOpen) {
         arrData[0] = "e";
+        console.log("aaa")
       }
+
+      //switch case for different markdown options
       switch (arrData[0]) {
         case "#":
           htmlArr.push(`<h1>${arrData.slice(1).join(" ")}</h1><hr />\n`);
@@ -121,20 +126,21 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
         case "###":
           htmlArr.push(`<h3>${arrData.slice(1).join(" ")}</h3>\n`);
           break;
-        // case "`":
-        //   htmlArr.push(`<code>${e.substr(1)}\n`);
-        //   isOpen = false;
-        //   break;
-        // case "`":
-        //   htmlArr.push(`${e.substr(e.length)}</code>\n`);
-        //   isOpen = true;
-        //   break;
+        case "`":
+          if(isOpen){
+            htmlArr.push(`</code>\n`);
+            isOpen = false;
+          }else{
+            htmlArr.push(`<code>\n`);
+            isOpen = true;
+          }
+          break;
         case "```":
-          htmlArr.push(`${e}</xmp>\n`);
+          htmlArr.push(`</xmp>\n`);
           isOpen = false;
           break;
         case "````":
-          htmlArr.push(`<xmp>${e}\n`);
+          htmlArr.push(`<xmp>\n`);
           isOpen = true;
           break;
         case "":
