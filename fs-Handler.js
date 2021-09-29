@@ -23,7 +23,7 @@ function readFile(fileSrc, lang = "en") {
         console.log(err);
         process.exit(1);
       }
-      
+
       fs.mkdir(process.cwd() + "/dist", { recursive: true }, (error) => {
         if (error) {
           console.log(`An error occurred: ${error}`);
@@ -65,7 +65,9 @@ function readFile(fileSrc, lang = "en") {
         if (error) {
           console.log(`An error occurred: ${error}`);
         } else {
-          fileDir = isMarkDown(filename) ? path.basename(filename, ".md") + ".html" : path.basename(filename, ".txt") + ".html";
+          fileDir = isMarkDown(filename)
+            ? path.basename(filename, ".md") + ".html"
+            : path.basename(filename, ".txt") + ".html";
           htmlConverter(data, fileDir, isMarkDown(filename), lang);
         }
       });
@@ -76,8 +78,8 @@ function readFile(fileSrc, lang = "en") {
 function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
   var fileName = "";
   var text = "";
-  let htmlElement = '';
- 
+  let htmlElement = "";
+
   //.txt: will grab the title if there are 2 blank lines
   var title = src.match(/^.+(\r?\n\r?\n\r?\n)/) || "";
 
@@ -91,59 +93,61 @@ function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
     text = src.substring(fileName.length + 3);
   }
 
-  if(!isMarkDown){
+  if (!isMarkDown) {
     htmlElement = text
-    .split(/\r?\n\r?\n/)
-    .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
-    .join(" ");
-  }else {
+      .split(/\r?\n\r?\n/)
+      .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
+      .join(" ");
+  } else {
     //.md process for headers, code and line break
     const htmlArr = [];
     // console.log(text.split(/\r?\n/));
     let isOpen = false;
-    text
-    .split(/\r?\n/)
-    .forEach(e => {
-      const arrData = e.split(' ');
-      arrData[0] = arrData[0].startsWith('```') && arrData[0].length > 3 ? '````' : arrData[0];
-      if(arrData[0] !== '```' && isOpen) {
-        arrData[0] = 'e';
+    text.split(/\r?\n/).forEach((e) => {
+      const arrData = e.split(" ");
+      arrData[0] =
+        arrData[0].startsWith("```") && arrData[0].length > 3
+          ? "````"
+          : arrData[0];
+      if (arrData[0] !== "```" && isOpen) {
+        arrData[0] = "e";
       }
-      switch(arrData[0]) {
-        case '#':
+      switch (arrData[0]) {
+        case "#":
           htmlArr.push(`<h1>${arrData.slice(1).join(" ")}</h1><hr />\n`);
           break;
-        case '##':
+        case "##":
           htmlArr.push(`<h2>${arrData.slice(1).join(" ")}</h2>\n`);
           break;
-        case '###':
+        case "###":
           htmlArr.push(`<h3>${arrData.slice(1).join(" ")}</h3>\n`);
           break;
-        case '```':
+        case "```":
           htmlArr.push(`${e}</xmp>\n`);
           isOpen = false;
           break;
-        case '````':
+        case "````":
           htmlArr.push(`<xmp>${e}\n`);
           isOpen = true;
           break;
-        case '':
+        case "":
           htmlArr.push(`<br />\n`);
           break;
-        case 'e':
+        case "e":
           htmlArr.push(`${e}\n`);
           break;
         default:
           htmlArr.push(`<p>${e}</p>\n`);
       }
-      htmlElement = htmlArr.join("")
+      htmlElement = htmlArr.join("");
     });
-
   }
- 
+
   //HTML template
   var htmlBase =
-    `<!doctype html><html lang="${lang== ""? "en" : lang}"><head><meta charset="utf-8">` +
+    `<!doctype html><html lang="${
+      lang == "" ? "en" : lang
+    }"><head><meta charset="utf-8">` +
     `<title> ${fileName}</title>` +
     `<meta name="viewport" content="width=device-width, initial-scale=1">` +
     `</head><body><h1>${title}</h1>${htmlElement}</body></html>`;
@@ -165,7 +169,9 @@ function indexGenerator(fileSrc, lang) {
       }
     });
     var htmlBase =
-      `<!doctype html><html lang="${lang == "" ? "en" : lang}"><head><meta charset="utf-8">` +
+      `<!doctype html><html lang="${
+        lang == "" ? "en" : lang
+      }"><head><meta charset="utf-8">` +
       `<title>Generated Site</title>` +
       `<meta name="viewport" content="width=device-width, initial-scale=1">` +
       `</head><body><h1>Generated Site</h1><div>${list}</div></body></html>`;
