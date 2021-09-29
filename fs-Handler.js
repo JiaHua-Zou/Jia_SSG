@@ -6,7 +6,7 @@ function isMarkDown(filename) {
   return filename.substr(filename.length - 3) === ".md";
 }
 
-function readFile(fileSrc) {
+function readFile(fileSrc, lang = "en") {
   // Read the argument to find if it is a folder or a .txt file.
   var fileDir;
   fse
@@ -44,14 +44,13 @@ function readFile(fileSrc) {
                       process.exit(1);
                     }
                     fileDir = path.basename(file, ".txt") + ".html";
-                    console.log("direct files");
-                    htmlConverter(data, fileDir, isMarkDown(file));
+                    htmlConverter(data, fileDir, isMarkDown(file), lang);
                   }
                 );
               }
             });
           });
-          indexGenerator(fileSrc);
+          indexGenerator(fileSrc, lang);
         }
       });
     });
@@ -66,23 +65,23 @@ function readFile(fileSrc) {
         if (error) {
           console.log(`An error occurred: ${error}`);
         } else {
-          fileDir = isMarkDown(filename)
-            ? path.basename(filename, ".md") + ".html"
-            : path.basename(filename, ".txt") + ".html";
-          console.log("single file");
-          htmlConverter(data, fileDir, isMarkDown(filename));
+          fileDir = isMarkDown(filename) ? path.basename(filename, ".md") + ".html" : path.basename(filename, ".txt") + ".html";
+          htmlConverter(data, fileDir, isMarkDown(filename), lang);
         }
       });
     });
   }
 }
 
-function htmlConverter(src, fileDirName, isMarkDown = false) {
+function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
   var fileName = "";
   var text = "";
-
+  let htmlElement = '';
+ 
+  //.txt: will grab the title if there are 2 blank lines
   var title = src.match(/^.+(\r?\n\r?\n\r?\n)/) || "";
 
+  //HTML <title> content will be taken from the file name or the var title.
   if (!title) {
     fileName = fileDirName.slice(0, -5);
     text = src;
@@ -92,15 +91,15 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
     text = src.substring(fileName.length + 3);
   }
 
-  let htmlElement = "";
-  if (!isMarkDown) {
+  if(!isMarkDown){
     htmlElement = text
-      .split(/\r?\n\r?\n/)
-      .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
-      .join(" ");
-  } else {
+    .split(/\r?\n\r?\n/)
+    .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
+    .join(" ");
+  }else {
+    //.md process for headers, code and line break
     const htmlArr = [];
-    //console.log(text.split(/\r?\n/));
+    // console.log(text.split(/\r?\n/));
     let isOpen = false;
     text.split(/\r?\n/).forEach((e) => {
       const arrData = e.split(" ");
@@ -150,9 +149,10 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
       htmlElement = htmlArr.join("");
     });
   }
-
+ 
+  //HTML template
   var htmlBase =
-    `<!doctype html><html lang="en"><head><meta charset="utf-8">` +
+    `<!doctype html><html lang="${lang== ""? "en" : lang}"><head><meta charset="utf-8">` +
     `<title> ${fileName}</title>` +
     `<meta name="viewport" content="width=device-width, initial-scale=1">` +
     `</head><body><h1>${title}</h1>${htmlElement}</body></html>`;
@@ -162,7 +162,7 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
   });
 }
 
-function indexGenerator(fileSrc) {
+function indexGenerator(fileSrc, lang) {
   fs.readdir(fileSrc, (err, files) => {
     var list = "";
     files.forEach((element) => {
@@ -174,7 +174,7 @@ function indexGenerator(fileSrc) {
       }
     });
     var htmlBase =
-      `<!doctype html><html lang="en"><head><meta charset="utf-8">` +
+      `<!doctype html><html lang="${lang == "" ? "en" : lang}"><head><meta charset="utf-8">` +
       `<title>Generated Site</title>` +
       `<meta name="viewport" content="width=device-width, initial-scale=1">` +
       `</head><body><h1>Generated Site</h1><div>${list}</div></body></html>`;
