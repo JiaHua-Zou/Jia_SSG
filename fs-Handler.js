@@ -17,6 +17,7 @@ function readFile(fileSrc, lang = "en") {
     .catch((err) => {
       console.log(err);
     });
+
   if (fs.lstatSync(fileSrc).isDirectory()) {
     fs.readdir(fileSrc, (err, files) => {
       if (err) {
@@ -109,9 +110,13 @@ function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
         arrData[0].startsWith("```") && arrData[0].length > 3
           ? "````"
           : arrData[0];
-      if (arrData[0] !== "```" && isOpen) {
+
+      // filter out the 3 and 1 backticks
+      if ((arrData[0] !== "```" && arrData[0] !== "`") && isOpen) {
         arrData[0] = "e";
       }
+
+      //switch case for different markdown options
       switch (arrData[0]) {
         case "#":
           htmlArr.push(`<h1>${arrData.slice(1).join(" ")}</h1><hr />\n`);
@@ -122,12 +127,21 @@ function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
         case "###":
           htmlArr.push(`<h3>${arrData.slice(1).join(" ")}</h3>\n`);
           break;
+        case "`":
+          if(isOpen){
+            htmlArr.push(`</code>\n`);
+            isOpen = false;
+          }else{
+            htmlArr.push(`<code>\n`);
+            isOpen = true;
+          }
+          break;
         case "```":
-          htmlArr.push(`${e}</xmp>\n`);
+          htmlArr.push(`</xmp>\n`);
           isOpen = false;
           break;
         case "````":
-          htmlArr.push(`<xmp>${e}\n`);
+          htmlArr.push(`<xmp>\n`);
           isOpen = true;
           break;
         case "":
