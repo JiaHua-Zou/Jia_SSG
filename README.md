@@ -8,6 +8,8 @@ Uses node.js to generate a html file from a textfile or text files in a folder.
 - Parse the title from the first line in the text that is followed by two blank lines in the text file.
 - Generate a HTML index that links to the other HTML if the input is a folder
 - Feature is updated(9/24/2021) now MD(MarkDown) file also can be generated as a HTML.
+- Now will encase text in `<code>...text...</code>` if the text is wrap in a single backtick.
+- Added new option in CLI: `-l` or `--lang`. Change the language type in the HTML element
 
 ## How To Use
 
@@ -21,7 +23,10 @@ $ git clone https://github.com/JiaHua-Zou/Jia_SSG.git
 npm install
 
 # Run the app
-$ node .\index.js [options] <file/folder>
+$ node .\index.js [option] <file/folder> [option]
+
+# Example
+$ node index.js -i file.txt -l fr
 ```
 
 ## Options
@@ -31,6 +36,7 @@ Usage: node index.js [options] <input>
 
 Options:
   -i, --input          Takes in an Input for file/folder     [string] [required]
+  -l, --lang           language type used in the HTML                   [string]
   -h, --help           Show help                                       [boolean]
       ---v, --version  Show version number                             [boolean]
 
