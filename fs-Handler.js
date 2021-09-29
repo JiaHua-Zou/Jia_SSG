@@ -91,7 +91,7 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
     title = title[0].trim();
     text = src.substring(fileName.length + 3);
   }
-//aa
+
   let htmlElement = "";
   if (!isMarkDown) {
     htmlElement = text
@@ -121,14 +121,14 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
         case "###":
           htmlArr.push(`<h3>${arrData.slice(1).join(" ")}</h3>\n`);
           break;
-        case "`":
-          htmlArr.push(`<code>${e.substr(1)}\n`);
-          isOpen = false;
-          break;
-        case "`":
-          htmlArr.push(`${e.substr(e.length)}</code>\n`);
-          isOpen = true;
-          break;
+        // case "`":
+        //   htmlArr.push(`<code>${e.substr(1)}\n`);
+        //   isOpen = false;
+        //   break;
+        // case "`":
+        //   htmlArr.push(`${e.substr(e.length)}</code>\n`);
+        //   isOpen = true;
+        //   break;
         case "```":
           htmlArr.push(`${e}</xmp>\n`);
           isOpen = false;
