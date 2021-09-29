@@ -24,6 +24,7 @@ function readFile(fileSrc, lang = "en") {
         console.log(err);
         process.exit(1);
       }
+
       fs.mkdir(process.cwd() + "/dist", { recursive: true }, (error) => {
         if (error) {
           console.log(`An error occurred: ${error}`);
@@ -65,7 +66,9 @@ function readFile(fileSrc, lang = "en") {
         if (error) {
           console.log(`An error occurred: ${error}`);
         } else {
-          fileDir = isMarkDown(filename) ? path.basename(filename, ".md") + ".html" : path.basename(filename, ".txt") + ".html";
+          fileDir = isMarkDown(filename)
+            ? path.basename(filename, ".md") + ".html"
+            : path.basename(filename, ".txt") + ".html";
           htmlConverter(data, fileDir, isMarkDown(filename), lang);
         }
       });
@@ -76,8 +79,8 @@ function readFile(fileSrc, lang = "en") {
 function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
   var fileName = "";
   var text = "";
-  let htmlElement = '';
- 
+  let htmlElement = "";
+
   //.txt: will grab the title if there are 2 blank lines
   var title = src.match(/^.+(\r?\n\r?\n\r?\n)/) || "";
 
@@ -91,12 +94,12 @@ function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
     text = src.substring(fileName.length + 3);
   }
 
-  if(!isMarkDown){
+  if (!isMarkDown) {
     htmlElement = text
-    .split(/\r?\n\r?\n/)
-    .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
-    .join(" ");
-  }else {
+      .split(/\r?\n\r?\n/)
+      .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
+      .join(" ");
+  } else {
     //.md process for headers, code and line break
     const htmlArr = [];
     // console.log(text.split(/\r?\n/));
@@ -144,7 +147,6 @@ function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
         case "":
           htmlArr.push(`<br />\n`);
           break;
-
         case "e":
           htmlArr.push(`${e}\n`);
           break;
@@ -154,10 +156,12 @@ function htmlConverter(src, fileDirName, isMarkDown = false, lang) {
       htmlElement = htmlArr.join("");
     });
   }
- 
+
   //HTML template
   var htmlBase =
-    `<!doctype html><html lang="${lang== ""? "en" : lang}"><head><meta charset="utf-8">` +
+    `<!doctype html><html lang="${
+      lang == "" ? "en" : lang
+    }"><head><meta charset="utf-8">` +
     `<title> ${fileName}</title>` +
     `<meta name="viewport" content="width=device-width, initial-scale=1">` +
     `</head><body><h1>${title}</h1>${htmlElement}</body></html>`;
@@ -179,7 +183,9 @@ function indexGenerator(fileSrc, lang) {
       }
     });
     var htmlBase =
-      `<!doctype html><html lang="${lang == "" ? "en" : lang}"><head><meta charset="utf-8">` +
+      `<!doctype html><html lang="${
+        lang == "" ? "en" : lang
+      }"><head><meta charset="utf-8">` +
       `<title>Generated Site</title>` +
       `<meta name="viewport" content="width=device-width, initial-scale=1">` +
       `</head><body><h1>Generated Site</h1><div>${list}</div></body></html>`;
