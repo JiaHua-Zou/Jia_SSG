@@ -3,7 +3,7 @@ var fse = require("fs-extra");
 const path = require("path");
 
 function isMarkDown(filename) {
-  return filename.split('.')[1] === 'md';
+  return filename.substr(filename.length - 3) === ".md";
 }
 
 function readFile(fileSrc) {
@@ -17,13 +17,13 @@ function readFile(fileSrc) {
     .catch((err) => {
       console.log(err);
     });
+
   if (fs.lstatSync(fileSrc).isDirectory()) {
     fs.readdir(fileSrc, (err, files) => {
       if (err) {
         console.log(err);
         process.exit(1);
       }
-      
       fs.mkdir(process.cwd() + "/dist", { recursive: true }, (error) => {
         if (error) {
           console.log(`An error occurred: ${error}`);
@@ -44,7 +44,8 @@ function readFile(fileSrc) {
                       process.exit(1);
                     }
                     fileDir = path.basename(file, ".txt") + ".html";
-                    htmlConverter(data, fileDir);
+                    console.log("direct files");
+                    htmlConverter(data, fileDir, isMarkDown(file));
                   }
                 );
               }
@@ -65,7 +66,10 @@ function readFile(fileSrc) {
         if (error) {
           console.log(`An error occurred: ${error}`);
         } else {
-          fileDir = isMarkDown(filename) ? path.basename(filename, ".md") + ".html" : path.basename(filename, ".txt") + ".html";
+          fileDir = isMarkDown(filename)
+            ? path.basename(filename, ".md") + ".html"
+            : path.basename(filename, ".txt") + ".html";
+          console.log("single file");
           htmlConverter(data, fileDir, isMarkDown(filename));
         }
       });
@@ -76,7 +80,7 @@ function readFile(fileSrc) {
 function htmlConverter(src, fileDirName, isMarkDown = false) {
   var fileName = "";
   var text = "";
- 
+
   var title = src.match(/^.+(\r?\n\r?\n\r?\n)/) || "";
 
   if (!title) {
@@ -88,54 +92,63 @@ function htmlConverter(src, fileDirName, isMarkDown = false) {
     text = src.substring(fileName.length + 3);
   }
 
-  let htmlElement = '';
-  if(!isMarkDown){
+  let htmlElement = "";
+  if (!isMarkDown) {
     htmlElement = text
-    .split(/\r?\n\r?\n/)
-    .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
-    .join(" ");
-  }else {
+      .split(/\r?\n\r?\n/)
+      .map((para) => `<p>${para.replace(/\r?\n/, " ")}</p>`)
+      .join(" ");
+  } else {
     const htmlArr = [];
-    console.log(text.split(/\r?\n/));
+    //console.log(text.split(/\r?\n/));
     let isOpen = false;
-    text
-    .split(/\r?\n/)
-    .forEach(e => {
-      const arrData = e.split(' ');
-      arrData[0] = arrData[0].startsWith('```') && arrData[0].length > 3 ? '````' : arrData[0];
-      if(arrData[0] !== '```' && isOpen) {
-        arrData[0] = 'e';
+    text.split(/\r?\n/).forEach((e) => {
+      const arrData = e.split(" ");
+      arrData[0] =
+        arrData[0].startsWith("```") && arrData[0].length > 3
+          ? "````"
+          : arrData[0];
+      if (arrData[0] !== "```" && isOpen) {
+        arrData[0] = "e";
       }
-      switch(arrData[0]) {
-        case '#':
+      switch (arrData[0]) {
+        case "#":
           htmlArr.push(`<h1>${arrData.slice(1).join(" ")}</h1><hr />\n`);
           break;
-        case '##':
+        case "##":
           htmlArr.push(`<h2>${arrData.slice(1).join(" ")}</h2>\n`);
           break;
-        case '###':
+        case "###":
           htmlArr.push(`<h3>${arrData.slice(1).join(" ")}</h3>\n`);
           break;
-        case '```':
+        case "`":
+          htmlArr.push(`<code>${e.substr(1)}\n`);
+          isOpen = false;
+          break;
+        case "`":
+          htmlArr.push(`${e.substr(e.length)}</code>\n`);
+          isOpen = true;
+          break;
+        case "```":
           htmlArr.push(`${e}</xmp>\n`);
           isOpen = false;
           break;
-        case '````':
+        case "````":
           htmlArr.push(`<xmp>${e}\n`);
           isOpen = true;
           break;
-        case '':
+        case "":
           htmlArr.push(`<br />\n`);
           break;
-        case 'e':
+
+        case "e":
           htmlArr.push(`${e}\n`);
           break;
         default:
           htmlArr.push(`<p>${e}</p>\n`);
       }
-      htmlElement = htmlArr.join("")
+      htmlElement = htmlArr.join("");
     });
-
   }
 
   var htmlBase =
