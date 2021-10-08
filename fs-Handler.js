@@ -1,12 +1,47 @@
 var fs = require("fs");
 var fse = require("fs-extra");
 const path = require("path");
+const { config } = require("yargs");
 
 function isMarkDown(filename) {
   return filename.substr(filename.length - 3) === ".md";
 }
 
-function readFile(fileSrc, lang = "en") {
+
+function readConfig(configPath) {
+  try {
+    // Read from the path specified
+    const configData = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    // Create data to export
+    let exp = {
+      "input": "",
+      "lang": ""
+    };
+
+    // Move over data from config file to export
+    if(configData.input)
+      exp.input = configData.input;
+    if(configData.lang)
+      exp.lang = configData.lang;
+
+    return exp;
+  } catch (err) {
+    console.log("Error in reading a config file");
+    console.log(err);
+  }
+}
+
+function readFile(fileSrc, configPath, lang = "en") {
+  // Read configuration file if specified
+  let configs = {};
+  if(config)
+    configs = readConfig(configPath);
+  // Replace data from configs to variables
+  if(configs.input)
+    fileSrc = configs.input;
+  if(configs.lang)
+    lang = configs.lang;
+
   // Read the argument to find if it is a folder or a .txt file.
   var fileDir;
   fse
@@ -30,14 +65,14 @@ function readFile(fileSrc, lang = "en") {
           console.log(`An error occurred: ${error}`);
         } else {
           files.forEach((file) => {
-            fs.stat(process.argv[3] + "/" + file, (err, stats) => {
+            fs.stat(fileSrc + "/" + file, (err, stats) => {
               if (err) {
                 console.log("An Errored has occurred!");
                 process.exit(1);
               }
               if (!stats.isDirectory()) {
                 fs.readFile(
-                  process.argv[3] + "/" + file,
+                  fileSrc + "/" + file,
                   "utf8",
                   function (err, data) {
                     if (err) {
@@ -56,7 +91,7 @@ function readFile(fileSrc, lang = "en") {
       });
     });
   } else {
-    var filename = process.argv[3];
+    var filename = fileSrc;
     fs.readFile(filename, "utf8", function (err, data) {
       if (err) {
         console.log(err);
@@ -196,5 +231,4 @@ function indexGenerator(fileSrc, lang) {
     });
   });
 }
-
 module.exports = readFile;
