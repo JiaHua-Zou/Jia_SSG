@@ -106,8 +106,8 @@ module.exports = {
       for (const file of files){
         if (file != null) {
           list += `<h3><a href="${
-            path.basename(file, ".txt") + ".html"
-          }">${path.basename(file, ".txt")}</a></h3>`;
+            file.substring(0, file.lastIndexOf(".")) + ".html"
+          }">${file.substring(0, file.lastIndexOf("."))}</a></h3>`;
         }
       }
   
