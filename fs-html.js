@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-
+var sideBar = "";
 module.exports = {
   htmlConverter: (src, fileDirName, isMarkDown = false, lang) => {
     var fileName = "";
@@ -91,7 +91,7 @@ module.exports = {
       }"><head><meta charset="utf-8">` +
       `<title> ${fileName}</title>` +
       `<meta name="viewport" content="width=device-width, initial-scale=1">` +
-      `</head><body><h1>${title}</h1>${htmlElement}</body></html>`;
+      `</head><body><div>${sideBar}</div><h1>${title}</h1>${htmlElement}</body></html>`;
 
     fs.writeFile(`./dist/${fileDirName}`, htmlBase, function (err) {
       if (err) console.log(err);
@@ -102,7 +102,6 @@ module.exports = {
   indexGenerator: (fileSrc, lang) => {
     fs.readdir(fileSrc, (err, files) => {
       var list = "";
-      var sideBar = '<div class="sidenav"><a href="index.html">Main Page</a>';
 
       //create elements for the sideBar and Links
       for (const file of files) {
@@ -110,14 +109,10 @@ module.exports = {
           list += `<h3><a href="${
             file.substring(0, file.lastIndexOf(".")) + ".html"
           }">${file.substring(0, file.lastIndexOf("."))}</a></h3>`;
-
-          sideBar += `<a href="${
-            file.substring(0, file.lastIndexOf(".")) + ".html"
-          }">${file.substring(0, file.lastIndexOf("."))}</a>`;
         }
       }
-
       //Sidebar
+      sideBar = SideBarGen(files);
 
       //HTML template for the index.html file.
       var htmlBase =
@@ -137,4 +132,24 @@ module.exports = {
       });
     });
   },
+
+  
 };
+function SideBarGen(fileList) {
+  var list = '<div class="sidenav">';
+  if (fileList.length > 1) {
+    list += '<a href="index.html">Main Page</a>';
+    for (const file of fileList) {
+      console.log(file.substring(0, file.lastIndexOf(".")));
+      list += `<a href="${
+        file.substring(0, file.lastIndexOf(".")) + ".html"
+      }">${file.substring(0, file.lastIndexOf("."))}</a>`;
+    }
+  } else {
+    list += list += `<a href="${
+      fileList.substring(0, fileList.lastIndexOf(".")) + ".html"
+    }">${file.substring(0, fileList.lastIndexOf("."))}</a>`;
+  }
+
+  return list;
+}
