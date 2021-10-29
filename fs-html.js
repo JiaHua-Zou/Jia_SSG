@@ -29,7 +29,7 @@ module.exports = {
       //.md process for headers, code and line break
       const htmlArr = [];
       let isOpen = false;
-      
+
       //Split the text and put it into an array.
       text.split(/\r?\n/).forEach((e) => {
         const arrData = e.split(" ");
@@ -98,19 +98,27 @@ module.exports = {
     });
   },
 
-  //Function: create the HTML index if there are multiple HTML file that were created. 
+  //Function: create the HTML index if there are multiple HTML file that were created.
   indexGenerator: (fileSrc, lang) => {
-
     fs.readdir(fileSrc, (err, files) => {
       var list = "";
-      for (const file of files){
+      var sideBar = '<div class="sidenav"><a href="index.html">Main Page</a>';
+
+      //create elements for the sideBar and Links
+      for (const file of files) {
         if (file != null) {
           list += `<h3><a href="${
             file.substring(0, file.lastIndexOf(".")) + ".html"
           }">${file.substring(0, file.lastIndexOf("."))}</a></h3>`;
+
+          sideBar += `<a href="${
+            file.substring(0, file.lastIndexOf(".")) + ".html"
+          }">${file.substring(0, file.lastIndexOf("."))}</a>`;
         }
       }
-  
+
+      //Sidebar
+
       //HTML template for the index.html file.
       var htmlBase =
         `<!doctype html><html lang="${
@@ -118,7 +126,7 @@ module.exports = {
         }"><head><meta charset="utf-8">` +
         `<title>Generated Site</title>` +
         `<meta name="viewport" content="width=device-width, initial-scale=1">` +
-        `</head><body><h1>Generated Site</h1><div>${list}</div></body></html>`;
+        `</head><body><div>${sideBar}</div><div><h1>Generated Site</h1></div><div>${list}</div></body></html>`;
 
       fs.writeFile(`./dist/index.html`, htmlBase, function (err) {
         if (err) {
