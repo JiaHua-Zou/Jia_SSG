@@ -30,6 +30,7 @@ function Main(fileSrc, configPath, lang = "en") {
           console.log(`An error occurred: ${error}`);
           process.exit(-1);
         }
+        indexGenerator(fileSrc, lang);
         for (const file of files) {
           fs.stat(fileSrc + "/" + file, (err, stats) => {
             if (err) {
@@ -41,7 +42,6 @@ function Main(fileSrc, configPath, lang = "en") {
             }
           });
         }
-        indexGenerator(fileSrc, lang);
       });
     });
   } else {

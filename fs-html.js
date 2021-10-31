@@ -91,7 +91,8 @@ module.exports = {
       }"><head><meta charset="utf-8">` +
       `<title> ${fileName}</title>` +
       `<meta name="viewport" content="width=device-width, initial-scale=1">` +
-      `</head><body><div>${sideBar}</div><h1>${title}</h1>${htmlElement}</body></html>`;
+      `<link rel="stylesheet" href="style.css">` +
+      `</head><body><div>${sideBar}</div><div class="body"><h1>${title}</h1>${htmlElement}</div></body></html>`;
 
     fs.writeFile(`./dist/${fileDirName}`, htmlBase, function (err) {
       if (err) console.log(err);
@@ -121,29 +122,31 @@ module.exports = {
         }"><head><meta charset="utf-8">` +
         `<title>Generated Site</title>` +
         `<meta name="viewport" content="width=device-width, initial-scale=1">` +
-        `</head><body><div>${sideBar}</div><div><h1>Generated Site</h1></div><div>${list}</div></body></html>`;
+        `<link rel="stylesheet" href="style.css">` +
+        `</head><body><div>${sideBar}</div><div class="body"><div><h1>Generated Site</h1></div><div>${list}</div></div></body></html>`;
 
       fs.writeFile(`./dist/index.html`, htmlBase, function (err) {
         if (err) {
           console.log(err);
           process.exit(-1);
         }
+        sideBarCSS();
         console.log("Done!");
       });
     });
   },
-
-  
 };
+
 function SideBarGen(fileList) {
   var list = '<div class="sidenav">';
   if (fileList.length > 1) {
     list += '<a href="index.html">Main Page</a>';
     for (const file of fileList) {
-      console.log(file.substring(0, file.lastIndexOf(".")));
-      list += `<a href="${
-        file.substring(0, file.lastIndexOf(".")) + ".html"
-      }">${file.substring(0, file.lastIndexOf("."))}</a>`;
+      if (file) {
+        list += `<a href="${
+          file.substring(0, file.lastIndexOf(".")) + ".html"
+        }">${file.substring(0, file.lastIndexOf("."))}</a>`;
+      }
     }
   } else {
     list += list += `<a href="${
@@ -152,4 +155,35 @@ function SideBarGen(fileList) {
   }
 
   return list;
+}
+
+function sideBarCSS() {
+  var style =
+    ".sidenav {" +
+    "height: 100%;" +
+    "position: fixed;" +
+    "width: auto;" +
+    "top: 0;" +
+    "left: 0;" +
+    "padding-top: 30px;" +
+    "}" +
+    ".sidenav a {" +
+    "padding: 10px;" +
+    "background-color: gray;" +
+    "text-decoration: none;" +
+    "font-size: 18px;" +
+    "color: black;" +
+    "display: block;" +
+    "}" +
+    "body {" +
+    "position: relative;" +
+    "margin-left: 300px;" +
+    "padding: 10px;" +
+    "}";
+  fs.writeFile("./dist/style.css", style, function (err) {
+    if (err) {
+      console.log(err);
+      process.exit(-1);
+    }
+  });
 }
