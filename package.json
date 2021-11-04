@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "main.js",
   "devDependencies": {
+    "eslint": "^8.1.0",
     "prettier": "2.4.1"
   },
   "bin": {
@@ -11,7 +12,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --write .",
-    "prettier-check": "prettier --check ."
+    "prettier-check": "prettier --check .",
+    "lint": "eslint . --fix",
+    "lint-check": "eslint ."
   },
   "keywords": [
     "cli"
