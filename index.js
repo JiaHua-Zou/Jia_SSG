@@ -20,13 +20,13 @@ const argv = require("yargs")
       alias: "lang",
       desc: "language type used in the HTML",
       type: "string",
-    }
+    },
   })
   .nargs("i", 1)
   .help("h")
   .alias("h", "help").argv;
 
-if(!(argv.config||argv.input)){
+if (!(argv.config || argv.input)) {
   console.log("You have to specify an input path!");
   exit(1);
 }

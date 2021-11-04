@@ -11,24 +11,6 @@ Uses node.js to generate a html file from a textfile or text files in a folder.
 - Now will encase text in `<code>...text...</code>` if the text is wrap in a single backtick.
 - Added new option in CLI: `-l` or `--lang`. Change the language type in the HTML element
 
-## How To Use
-
-To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
-
-```bash
-# Clone this repository
-$ git clone https://github.com/JiaHua-Zou/Jia_SSG.git
-
-# Install the package
-npm install
-
-# Run the app
-$ node .\index.js [option] <file/folder> [option]
-
-# Example
-$ node index.js -i file.txt -l fr
-```
-
 ## Options
 
 ```bash

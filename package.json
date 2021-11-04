@@ -2,12 +2,16 @@
   "name": "ssg_jia_v0.1",
   "version": "0.1.0",
   "main": "main.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "prettier": "2.4.1"
+  },
   "bin": {
     "yargs-example": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "prettier --write .",
+    "prettier-check": "prettier --check ."
   },
   "keywords": [
     "cli"

@@ -19,7 +19,17 @@ $ node .\index.js [option] <file/folder> [option]
 ```
 
 ## Example
+
 From the main directory
 
 `$ node index.js -i file.txt -l fr` - Generate `file.txt` with the `fr` language.
 `$ node index.js --input /SherlocksStories` - Generate files inside of the folder.
+
+## Using prettier
+```bash
+#To run the prettier, use the following command:
+npm prettier
+
+#To check if prettier have fix code formatting, use the following command:
+npm prettier-check
+```

@@ -180,6 +180,7 @@ function sideBarCSS() {
     "margin-left: 300px;" +
     "padding: 10px;" +
     "}";
+
   fs.writeFile("./dist/style.css", style, function (err) {
     if (err) {
       console.log(err);
