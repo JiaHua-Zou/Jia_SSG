@@ -43,3 +43,14 @@ npm run lint
 #To check if the files have any mistake, use the following command:
 npm run lint-check
 ```
+
+## VS Code settings
+
+### Extenstions
+- Prettier v2.4.1
+- ESlint v8.1.0
+
+
+### Settings
+- Install prettier and Eslint for the correct settings
+- `.vscode/` has the configuration settings for Prettier and Eslint.
